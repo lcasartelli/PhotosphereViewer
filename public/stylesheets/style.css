@@ -1,0 +1,55 @@
+body {
+  padding-top: 0px;
+  margin: 0px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color:#F6F6F6;
+}
+
+a {
+  color: #00B7FF;
+}
+a:link {text-decoration:none;}
+a:visited {text-decoration:none;}
+a:hover {text-decoration:none;}
+a:active {text-decoration:none;}
+
+.header {
+	background-color:#D11919;
+	width:100%;
+	height:60px;
+
+	/* Firefox */
+	display:-moz-box;
+	-moz-box-pack:center;
+	-moz-box-align:center;
+
+	/* Safari and Chrome */
+	display:-webkit-box;
+	-webkit-box-pack:center;
+	-webkit-box-align:center;
+
+	/* W3C */
+	display:box;
+	box-pack:center;
+	box-align:center;
+}
+
+.title {
+	text-align:center; 
+	font-size:20px;
+	text-decoration: none;
+	color:white;
+}
+
+.gallery {
+
+	padding-top: 50px;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.sphere_canvas {
+
+	width: 100%; 
+	height: 500px;
+}
