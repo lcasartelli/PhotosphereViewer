@@ -1,5 +1,25 @@
 extends layout
 
 block content
-	form(action="...", method="post", enctype="multipart/form-data")
-		input(type="file", name="displayImage")
+	div(id="uploader")
+		
+		form(action="/upload", method="post", enctype="multipart/form-data")
+
+			table
+				tr
+					td Titolo
+					td 
+						input(type="text", name="titolo")
+
+				tr
+					td Descrizione
+					td 
+						input(type="text", name="descr")
+
+				tr
+					td Immagine
+					td
+						input(type="file", name="image")
+			
+			br br br
+			input(type="submit", name="submit")

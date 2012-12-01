@@ -2,11 +2,13 @@ extends layout
 
 block content
 
-	div(class="gallery")
+	div(id="add", class="center_container")
+		a(href="/add")
+			button Aggiungi foto
+
+	div(id="gallery")
 		
 		for photo in photos
 
-			p!=photo
-
-		a(href="/viewer=0")
-			img(src="/images/img0_thumb.jpg", alt="")
+			a(href="/viewer="+photo.id)
+				img(src="#{photo.thumbnail}", alt="#{photo.titolo}")

@@ -35,8 +35,8 @@ block scripts
 			if (pano == 'reception') {
 				return {
 					location: {
-						pano: '',
-						description: ''
+						pano: '#{title}',
+						description: '#{title}: #{descrizione}'
 					},
 					links: [],
 					// The text for the copyright control.
@@ -58,4 +58,4 @@ block scripts
 
 
 block content
-		div(id="pano_canvas",class="sphere_canvas")
+		div(id="pano_canvas", class="sphere_canvas")

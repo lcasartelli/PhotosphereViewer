@@ -3,58 +3,72 @@
  * GET home page.
  */
 
-var easyimg = require('easyimage');
-var mongoose = require('mongoose');
+var easyimg = 	require('easyimage');
+var mongoose = 	require('mongoose');
+var fs = 		require('fs');
 
-// [WARNING] Change with correct dir for upload
-var images_path = "/public/images/";
-thumbnails_path = "/public/images/thumbnails";
+//The complete path id STATIC_PATH + *_PATH
+var STATIC_PATH = "./public"
+var IMAGES_PATH = "/uploads/images/";
+THUMBNAILS_PATH = "/uploads/images/thumbnails/";
 
-var error = function(err) { 
-				if(err)
-				console.log(error);
-};
-var db = mongoose.createConnection('mongodb://localhost/database', error);
+var THUMB_WIDTH = 	128;
+var THUMB_HEIGHT = 	128;
 
-var PhotoSchema_def = {
-    titolo: String,
-    descrizione: String,
-    path: String,
-    filename: String,
-    thumbnail: String
+
+var db = mongoose.createConnection('mongodb://localhost/database', 
+									function(err) { if(err) throw err; });		//MongoDB init
+	
+var PhotoSchema_def = {											//Schema structure
+    titolo: 		String,
+    descrizione: 	String,
+    path: 			String,
+    filename: 		String,
+    thumbnail: 		String
 };
 var photoSchema = new mongoose.Schema(PhotoSchema_def);
-var Photo = db.model('Photo', photoSchema);
+var Photo = db.model('Photo', photoSchema);						//Instance use for all queries
 
 exports.index = function(req, res){
 
-	var photos;
+	//Prende dal db tutte le istanze di Photo e processa il template
 
-	var photos = Photo.find().exec(function (err, results) {
-  										if (err) return handleError(err);
-  										results = photos;
-	});
+	Photo.find().exec(function (err, results) {
+  							if (err) 
+  								throw err;
 
-	res.render('index', { title: 'Home',photos: photos});
+  							res.render('index', { title: 'Home',photos: results});
+	});	
 };
 
 exports.viewer = function(req, res) {
-	
-	res.render('detail', { title:titolo, descrizione:descrizione, image:image, thumbnail: thumbnail });
+
+	//Ottiene partendo dall'id l'istanza di Photo corrispondente e processa il template
+
+	var photo = Photo.findById(req.params.id).exec(function(err, result) {
+			
+				if (err) 
+					throw err;
+		
+  				photo ? res.render('detail', { title:result.titolo, descrizione:result.descrizione, image:result.path}) : res.render('404');
+	});
 };
 
 
-exports.save = function(req, res) {
+exports.upload = function(req, res) {
 
-	var filename;
-	var titolo;
-	var descrizione;
-	var image = images_path+filename;
-	var thumbnail = thumbnails_path+filename;
+	fs.readFile(req.files.image.path, function (err, data) {			//Salva dalla cartella temporanea a /uploads/images l'immagine caricata
+
+			fs.writeFile(FIRST_PATH+image, data, function (err) {
+				if(err)	throw err;
+ 			});
+	});
 
 	function save() {
 		
-		var saved_image = new Photo({titolo:titolo,descrizione:descrizione,path:image,filename:filename, thumbnail: thumbnail});
+		//Memorizza del db foto e metadati associati
+
+		var saved_image = new Photo({titolo: req.body.titolo, descrizione:req.body.descr, path: IMAGES_PATH+filename, filename:req.files.image.name, thumbnail: THUMBNAILS_PATH+filename});
 		saved_image.save(function (err) {
   					if (err) return handleError(err);
 		});
@@ -62,15 +76,26 @@ exports.save = function(req, res) {
 
 	easyimg.thumbnail(
 		{
-			src: image, dst:thumbnail,
-			width:128, height:128,
+			//Creazione thumbnail
+			src: FIRST_PATH+IMAGES_PATH+filename, dst:FIRST_PATH+THUMBNAILS_PATH+filename,
+			width:THUMB_WIDTH, height:THUMB_HEIGHT,
 			x:0, y:0
 		},
 		function(err, image) {
-			if (err) throw err;
+			if (err) 
+				throw err;
+
 			console.log('Thumbnail created');
 			console.log(image);
+	
 			save();
+
+			res.redirect('/');
 		}
 	);
+};
+
+exports.add = function(req, res) {
+	
+	res.render('add', { title:"Carica immagine"});
 };
