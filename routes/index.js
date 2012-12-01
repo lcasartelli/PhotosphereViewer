@@ -8,7 +8,7 @@ var mongoose = 	require('mongoose');
 var fs = 		require('fs');
 
 //The complete path id STATIC_PATH + *_PATH
-var STATIC_PATH = "./public"
+var PUBLIC_PATH = "./public"
 var IMAGES_PATH = "/uploads/images/";
 THUMBNAILS_PATH = "/uploads/images/thumbnails/";
 
@@ -59,7 +59,7 @@ exports.upload = function(req, res) {
 
 	fs.readFile(req.files.image.path, function (err, data) {			//Salva dalla cartella temporanea a /uploads/images l'immagine caricata
 
-			fs.writeFile(FIRST_PATH+image, data, function (err) {
+			fs.writeFile(PUBLIC_PATH+IMAGES_PATH+req.files.image.name, data, function (err) {
 				if(err)	throw err;
  			});
 	});
@@ -68,7 +68,7 @@ exports.upload = function(req, res) {
 		
 		//Memorizza del db foto e metadati associati
 
-		var saved_image = new Photo({titolo: req.body.titolo, descrizione:req.body.descr, path: IMAGES_PATH+filename, filename:req.files.image.name, thumbnail: THUMBNAILS_PATH+filename});
+		var saved_image = new Photo({titolo: req.body.titolo, descrizione:req.body.descr, path: IMAGES_PATH+req.files.image.name, filename:req.files.image.name, thumbnail: THUMBNAILS_PATH+req.files.image.name});
 		saved_image.save(function (err) {
   					if (err) return handleError(err);
 		});
@@ -77,7 +77,7 @@ exports.upload = function(req, res) {
 	easyimg.thumbnail(
 		{
 			//Creazione thumbnail
-			src: FIRST_PATH+IMAGES_PATH+filename, dst:FIRST_PATH+THUMBNAILS_PATH+filename,
+			src: PUBLIC_PATH+IMAGES_PATH+req.files.image.name, dst:PUBLIC_PATH+THUMBNAILS_PATH+req.files.image.name,
 			width:THUMB_WIDTH, height:THUMB_HEIGHT,
 			x:0, y:0
 		},
