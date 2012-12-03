@@ -1,13 +1,9 @@
 
-/*
- * GET home page.
- */
-
 var easyimg = 	require('easyimage');
 var mongoose = 	require('mongoose');
 var fs = 		require('fs');
 
-//The complete path id STATIC_PATH + *_PATH
+//The complete path id PUBLIC_PATH + *_PATH
 var PUBLIC_PATH = "./public"
 var IMAGES_PATH = "/uploads/images/";
 var THUMBNAILS_PATH = "/uploads/images/thumbnails/";
@@ -77,6 +73,7 @@ exports.upload = function(req, res) {
 	easyimg.thumbnail(
 		{
 			//Creazione thumbnail
+			
 			src: PUBLIC_PATH+IMAGES_PATH+req.files.image.name, dst:PUBLIC_PATH+THUMBNAILS_PATH+req.files.image.name,
 			width:THUMB_WIDTH, height:THUMB_HEIGHT,
 			x:0, y:0
