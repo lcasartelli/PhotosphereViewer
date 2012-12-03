@@ -10,7 +10,7 @@ var fs = 		require('fs');
 //The complete path id STATIC_PATH + *_PATH
 var PUBLIC_PATH = "./public"
 var IMAGES_PATH = "/uploads/images/";
-THUMBNAILS_PATH = "/uploads/images/thumbnails/";
+var THUMBNAILS_PATH = "/uploads/images/thumbnails/";
 
 var THUMB_WIDTH = 	128;
 var THUMB_HEIGHT = 	128;
