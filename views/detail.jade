@@ -6,7 +6,7 @@ block scripts
 		
 	script(type="text/javascript")
 
-		function initialize() {
+		function initialize () {
 
 			var panoOptions = {
 				pano: 'reception',
@@ -18,13 +18,14 @@ block scripts
 				document.getElementById('pano_canvas'), panoOptions);
 		}
 
-		function getCustomPanoramaTileUrl(pano, zoom, tileX, tileY) {
+		function getCustomPanoramaTileUrl (pano, zoom, tileX, tileY) {
 
 			console.log("#{image}");
 			return "#{image}";
 		}
 
-		function getCustomPanorama(pano, zoom, tileX, tileY) {
+		function getCustomPanorama (pano, zoom, tileX, tileY) {
+			
 			if (pano == 'reception') {
 				return {
 					location: {
@@ -32,14 +33,10 @@ block scripts
 						description: '#{title}: #{descrizione}'
 					},
 					links: [],
-					// The text for the copyright control.
 					copyright: '',
-					// The definition of the tiles for this panorama.
 					tiles: {
 						tileSize: new google.maps.Size(1024, 512),
 						worldSize: new google.maps.Size(1024, 512),
-						// The heading in degrees at the origin of the panorama
-						// tile set.
 						centerHeading: 105,
 						getTileUrl: getCustomPanoramaTileUrl
 					}
