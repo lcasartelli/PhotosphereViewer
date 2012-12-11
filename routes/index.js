@@ -90,17 +90,51 @@ exports.viewer = function(req, res) {
 //Salva dalla cartella temporanea a /uploads/images l'immagine caricata
 exports.upload = function(req, res) {
 
+    var newfilename = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    var timestamp = Math.round(+new Date()/1000);
+    var ext = "";
+
+    
+
+
+    var generateStr = function generateStr () {
+
+    	var i = 0;
+    	var str = "";
+
+    	for(i = 0; i < 5; ++i) {
+
+    		str += possible.charAt(Math.floor(Math.random() * possible.length));
+    	}
+
+    	return str;
+
+    }
+
+    var findExtension = function findExtension () {
+
+    	return /(?:\.([^.]+))?$/.exec(req.files.image.name)[1];
+    }
+
+    newfilename = generateStr() + timestamp + "." + findExtension();
+
+
 	fs.readFile(req.files.image.path, function (err, data) {			
 
-			fs.writeFile(PUBLIC_PATH+IMAGES_PATH+req.files.image.name, data, function (err) {
-				if(err)	throw err;
+			fs.writeFile(PUBLIC_PATH+IMAGES_PATH+newfilename, data, function (err) {
+				if(err)	{
+
+					throw err;
+				}
+					
  			});
 	});
 
 	//Memorizza del db foto e metadati associati
 	var save = function save() {	
 
-		var saved_image = new Photo({titolo: req.body.titolo, descrizione:req.body.descr, path: IMAGES_PATH+req.files.image.name, filename:req.files.image.name, thumbnail: THUMBNAILS_PATH+req.files.image.name});
+		var saved_image = new Photo({titolo: req.body.titolo, descrizione:req.body.descr, path: IMAGES_PATH+newfilename, filename:newfilename, thumbnail: THUMBNAILS_PATH+newfilename});
 		saved_image.save(function (err) {
   					if (err) {
 
@@ -112,7 +146,7 @@ exports.upload = function(req, res) {
 		
 	easyimg.thumbnail(
 		{			
-			src: PUBLIC_PATH+IMAGES_PATH+req.files.image.name, dst:PUBLIC_PATH+THUMBNAILS_PATH+req.files.image.name,
+			src: PUBLIC_PATH+IMAGES_PATH+newfilename, dst:PUBLIC_PATH+THUMBNAILS_PATH+newfilename,
 			width:THUMB_WIDTH, height:THUMB_HEIGHT,
 			x:0, y:0
 		},
