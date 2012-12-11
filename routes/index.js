@@ -30,14 +30,43 @@ var Photo = db.model('Photo', photoSchema);				//Instance use for all queries
 //Prende dal db tutte le istanze di Photo e processa il template
 exports.index = function (req, res){						
 
-	
+	//Immagini a blocchi di 5
+
+	var parseResult = function parseResult (obj) {
+
+		var i = 0, j = 0, pos = 0;
+		var formatted_result = [];
+
+		for(i=0; i<obj.length; i+=5) {
+
+			formatted_result[pos] = [];
+
+			for(j = 0; (j<5 && (j+i)<obj.length); ++j) {
+
+				if (obj[i+j] == undefined || !(obj[i+j])) {
+
+					break;
+				}	
+
+				formatted_result[pos][j] = obj[i+j];
+			}
+
+			pos += 1;
+		}
+
+		console.log(formatted_result);
+
+		return formatted_result;
+	}
+
 
 	Photo.find().exec( function (err, results) {
   							if (err) {
 
   								throw err;
-  							}	
-  							res.render('index', { title: 'Home',photos: results});
+  							}
+
+  							res.render('index', { title: 'Home', photos_container: parseResult(results)});
 	});	
 };
 

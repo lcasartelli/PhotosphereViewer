@@ -8,7 +8,16 @@ block content
 
 	div(id="gallery")
 		
-		for photo in photos
+		if photos_container.length == 0
 
-			a(href="/viewer="+photo.id)
-				img(src="#{photo.thumbnail}", alt="#{photo.titolo}",class="thumbnail")
+			p(class="center_container") Nessun risultato, carica una panoramica PhotoSphere e riprova.
+	
+
+		for photos in photos_container
+
+			div(id="small_container", class="center_container")
+
+				for photo in photos
+
+					a(href="/viewer="+photo.id)
+						img(src="#{photo.thumbnail}", alt="#{photo.titolo}",class="thumbnail")
